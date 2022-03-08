@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <kyero>
+    <feed_version>3</feed_version>
+  </kyero>
+  <property>
+    <id>3010</id>
+    <date>2022-03-07 12:40:31</date>
+    <ref>CF2502</ref>
+    <price>360000</price>
+    <price_freq>sale</price_freq>
+    <type>Villa</type>
+  </property>
+</root>

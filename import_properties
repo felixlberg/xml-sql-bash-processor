@@ -1,0 +1,73 @@
+#!/bin/bash
+
+
+############################################################
+# Main program                                             #
+############################################################
+PROTOCOL=TCP
+USER=root
+PASS=""
+HOST=localhost
+FILE=test.xml
+
+# Get the options
+while getopts ":hvsu:p:H:" option; do
+   case $option in
+      h) # display Help
+        echo "$HELP"; exit;;
+      v) # verbose
+        VERBOSE=true;;
+      s) # socket
+        PROTOCOL=SOCKET;;
+      u) # username
+        USER=$OPTARG;;
+      p) # password
+        PASS=$OPTARG;;
+      H) # hostname
+        HOST=$OPTARG;;
+     \?) # Invalid option
+        echo "Error: Invalid option"; exit;;
+   esac
+done
+
+# Shift to next argument
+shift "$((OPTIND - 1))"
+
+# Verbose Info
+if [ "$VERBOSE" = "true" ] ; then
+  echo "############################################################"
+  echo "Initiating SQL                                             #"
+  echo "############################################################"
+  echo "..."
+  echo "..."
+  echo "Loading XML contents into tables in MySql"
+fi
+
+# SQL COMMANDS SECTION
+sudo mysql --protocol=$PROTOCOL --user=$USER --password=$PASS --host=$HOST << EOF
+USE test;
+LOAD XML LOCAL INFILE '$FILE'
+INTO TABLE properties
+ROWS IDENTIFIED BY '<property>'
+(
+@id,
+@date,
+@ref,
+@price,
+@price_freq,
+@type
+)
+SET
+id=@id,
+date=@date,
+ref=@ref,
+price=@price,
+price_freq=@price_freq,
+type=@type;
+EOF
+
+
+# Verbose Info
+if [ "$VERBOSE" = "true" ] ; then
+  echo 'SQL load succesful'
+fi
